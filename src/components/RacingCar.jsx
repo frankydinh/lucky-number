@@ -33,13 +33,20 @@ function RacingCar({ names, duration, onComplete }) {
       return 0.5 + Math.random() * 0.3; // 0.5-0.8 for others
     });
     
+    // Oscillation parameters for overtaking effect
+    const MIN_OSCILLATION_FREQ = 0.5;
+    const MAX_OSCILLATION_FREQ = 2.0;
+    const MIN_OSCILLATION_AMP = 3;
+    const MAX_OSCILLATION_AMP = 10;
+    
     // Generate unique oscillation patterns for each car (for overtaking effect)
-    const oscillationFreqs = names.map(() => 0.5 + Math.random() * 1.5);
-    const oscillationAmps = names.map(() => 3 + Math.random() * 7);
+    const oscillationFreqs = names.map(() => MIN_OSCILLATION_FREQ + Math.random() * (MAX_OSCILLATION_FREQ - MIN_OSCILLATION_FREQ));
+    const oscillationAmps = names.map(() => MIN_OSCILLATION_AMP + Math.random() * (MAX_OSCILLATION_AMP - MIN_OSCILLATION_AMP));
     const oscillationPhases = names.map(() => Math.random() * Math.PI * 2);
 
     const raceDuration = duration * 1000; // Convert to milliseconds
     const accelerationPhase = 0.7; // Winner starts accelerating at 70% progress
+    const slowdownFactor = 0.85; // Non-winners slow down to let winner pass
     
     const animate = () => {
       const elapsed = Date.now() - startTimeRef.current;
@@ -68,7 +75,6 @@ function RacingCar({ names, duration, onComplete }) {
           
           // Slow down non-winners near the end so winner can overtake
           if (progressPercent > accelerationPhase) {
-            const slowdownFactor = 0.85;
             carProgress = carProgress * slowdownFactor;
           }
         }
@@ -80,14 +86,18 @@ function RacingCar({ names, duration, onComplete }) {
         
         carProgress += oscillation;
         
-        // Clamp progress
+        // Clamp progress to valid range
+        carProgress = Math.max(0, Math.min(carProgress, 100));
+        
+        // Set final progress
         if (index === winnerIndex && progressPercent >= 1) {
           newProgress[name] = 100;
           if (!finished.includes(name)) {
             newFinished.push({ name, position: 1 });
           }
         } else {
-          newProgress[name] = Math.max(0, Math.min(carProgress, 98));
+          // Non-winners capped at 98% until race ends
+          newProgress[name] = Math.min(carProgress, 98);
         }
       });
 
