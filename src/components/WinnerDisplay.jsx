@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import './WinnerDisplay.css';
 

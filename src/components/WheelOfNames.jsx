@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import './WheelOfNames.css';
 
 function WheelOfNames({ names, duration, onComplete }) {

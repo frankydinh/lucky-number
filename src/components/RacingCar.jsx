@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import './RacingCar.css';
 
 function RacingCar({ names, duration, onComplete }) {
