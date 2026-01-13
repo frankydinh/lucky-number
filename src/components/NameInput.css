@@ -1,0 +1,144 @@
+.name-input-container {
+  margin-bottom: 25px;
+}
+
+.name-input-container h2 {
+  margin-bottom: 15px;
+  color: var(--dark);
+  font-size: 1.5rem;
+}
+
+.name-input-container textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--light);
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.3s;
+}
+
+.name-input-container textarea:focus {
+  border-color: var(--primary);
+}
+
+.name-input-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.name-input-actions button,
+.file-upload-btn {
+  flex: 1;
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.file-upload-btn {
+  display: inline-block;
+  text-align: center;
+}
+
+.name-input-actions button:hover:not(:disabled),
+.file-upload-btn:hover {
+  background: var(--primary-dark);
+}
+
+.name-input-actions button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.names-list {
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--light);
+  border-radius: 8px;
+}
+
+.names-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.names-list-header h3 {
+  color: var(--dark);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.btn-clear {
+  padding: 6px 12px;
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-clear:hover {
+  background: #DC2626;
+}
+
+.names-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.name-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.name-chip button {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.name-chip button:hover {
+  color: #DC2626;
+}
+
+@media (max-width: 480px) {
+  .name-input-actions {
+    flex-direction: column;
+  }
+
+  .names-list {
+    padding: 10px;
+  }
+
+  .name-chip {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+}
