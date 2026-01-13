@@ -21,14 +21,43 @@ function RacingCar({ names, duration, onComplete }) {
     setIsRacing(true);
     startTimeRef.current = Date.now();
     
-    // Generate random finish times for each racer
-    const finishTimes = names.map(() => Math.random());
-    const sortedIndices = finishTimes
-      .map((time, index) => ({ time, index }))
-      .sort((a, b) => a.time - b.time)
-      .map(item => item.index);
+    // Select a random winner at the start
+    const winnerIndex = Math.floor(Math.random() * names.length);
+    
+    // Generate base speeds for each car with variation
+    const baseSpeeds = names.map((_, index) => {
+      // Winner gets slightly better base speed
+      if (index === winnerIndex) {
+        return 0.7 + Math.random() * 0.15; // 0.7-0.85
+      }
+      return 0.5 + Math.random() * 0.3; // 0.5-0.8 for others
+    });
+    
+    // Oscillation parameters for overtaking effect
+    const MIN_OSCILLATION_FREQ = 0.5;
+    const MAX_OSCILLATION_FREQ = 2.0;
+    const MIN_OSCILLATION_AMP = 3;
+    const MAX_OSCILLATION_AMP = 10;
+    
+    // Helper function to generate random value in range
+    const randomInRange = (min, max) => min + Math.random() * (max - min);
+    
+    // Generate unique oscillation patterns for each car (for overtaking effect)
+    const oscillationFreqs = names.map(() => randomInRange(MIN_OSCILLATION_FREQ, MAX_OSCILLATION_FREQ));
+    const oscillationAmps = names.map(() => randomInRange(MIN_OSCILLATION_AMP, MAX_OSCILLATION_AMP));
+    const oscillationPhases = names.map(() => Math.random() * Math.PI * 2);
 
     const raceDuration = duration * 1000; // Convert to milliseconds
+    const accelerationPhase = 0.7; // Winner starts accelerating at 70% progress
+    const slowdownFactor = 0.85; // Non-winners slow down to let winner pass
+    
+    // Winner progress phases
+    const WINNER_NORMAL_PROGRESS = 75; // Progress during normal phase (0-70%)
+    const WINNER_ACCEL_PROGRESS = 25; // Additional progress during acceleration (70-100%)
+    
+    // Progress limits
+    const OSCILLATION_DAMPING = 0.5; // Factor for reducing oscillation as race progresses
+    const NON_WINNER_MAX_PROGRESS = 98; // Non-winners capped at 98% until race ends
     
     const animate = () => {
       const elapsed = Date.now() - startTimeRef.current;
@@ -38,37 +67,74 @@ function RacingCar({ names, duration, onComplete }) {
       const newFinished = [];
 
       names.forEach((name, index) => {
-        const finishPosition = sortedIndices.indexOf(index);
-        const finishTime = (finishPosition / names.length) * 0.3 + 0.7; // Finish between 70% and 100% of duration
+        let carProgress = 0;
         
-        if (progressPercent >= finishTime) {
-          newProgress[name] = 100;
-          if (!finished.includes(name)) {
-            newFinished.push({ name, position: finishPosition + 1 });
+        if (index === winnerIndex) {
+          // Winner's progression with dramatic acceleration at the end
+          if (progressPercent < accelerationPhase) {
+            // Normal phase with overtaking
+            carProgress = (progressPercent / accelerationPhase) * WINNER_NORMAL_PROGRESS;
+          } else {
+            // Acceleration phase - dramatic speed boost
+            const accelProgress = (progressPercent - accelerationPhase) / (1 - accelerationPhase);
+            const accelerationCurve = Math.pow(accelProgress, 0.6); // Ease out for smooth acceleration
+            carProgress = WINNER_NORMAL_PROGRESS + accelerationCurve * WINNER_ACCEL_PROGRESS;
           }
         } else {
-          const carProgress = (progressPercent / finishTime) * 100;
-          // Add some random variation
-          const randomVariation = Math.sin(elapsed / 100 + index) * 2;
-          newProgress[name] = Math.min(carProgress + randomVariation, 99);
+          // Other cars' progression with more variance
+          carProgress = progressPercent * baseSpeeds[index] * 100;
+          
+          // Slow down non-winners near the end so winner can overtake
+          if (progressPercent > accelerationPhase) {
+            carProgress = carProgress * slowdownFactor;
+          }
+        }
+        
+        // Add overtaking effect with oscillating variations for all cars
+        const oscillation = Math.sin(
+          elapsed * oscillationFreqs[index] / 1000 + oscillationPhases[index]
+        ) * oscillationAmps[index] * (1 - progressPercent * OSCILLATION_DAMPING);
+        
+        carProgress += oscillation;
+        
+        // Clamp progress to valid range
+        carProgress = Math.max(0, Math.min(carProgress, 100));
+        
+        // Set final progress
+        if (index === winnerIndex && progressPercent >= 1) {
+          newProgress[name] = 100;
+          if (!finished.includes(name)) {
+            newFinished.push({ name, position: 1 });
+          }
+        } else {
+          // Non-winners capped until race ends
+          newProgress[name] = Math.min(carProgress, NON_WINNER_MAX_PROGRESS);
         }
       });
 
       setProgress(newProgress);
       
       if (newFinished.length > 0 && finished.length === 0) {
-        setFinished(newFinished.sort((a, b) => a.position - b.position));
+        setFinished(newFinished);
       }
 
       if (progressPercent < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
         setIsRacing(false);
-        // Complete with top 3
-        const top3 = sortedIndices.slice(0, 3).map((idx, pos) => ({
-          name: names[idx],
+        
+        // Calculate final positions based on final progress
+        const finalResults = names.map((name, index) => ({
+          name,
+          progress: newProgress[name],
+          index
+        })).sort((a, b) => b.progress - a.progress);
+        
+        const top3 = finalResults.slice(0, 3).map((result, pos) => ({
+          name: result.name,
           position: pos + 1
         }));
+        
         onComplete(top3[0].name, top3);
       }
     };
