@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import './WheelOfNames.css';
 
 function WheelOfNames({ names, duration, onComplete }) {
@@ -14,14 +14,7 @@ function WheelOfNames({ names, duration, onComplete }) {
   ];
 
   useEffect(() => {
-    drawWheel();
-  }, [names]);
-
-  useEffect(() => {
-    startSpin();
-  }, []);
-
-  const drawWheel = () => {
+    const drawWheel = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -72,8 +65,13 @@ function WheelOfNames({ names, duration, onComplete }) {
     ctx.stroke();
   };
 
-  const startSpin = () => {
-    setIsSpinning(true);
+    drawWheel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [names]);
+
+  useEffect(() => {
+    const startSpin = () => {
+      setIsSpinning(true);
     
     // Calculate winner
     winnerIndex.current = Math.floor(Math.random() * names.length);
@@ -93,6 +91,10 @@ function WheelOfNames({ names, duration, onComplete }) {
       onComplete(names[winnerIndex.current]);
     }, duration * 1000);
   };
+
+    startSpin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="wheel-container">

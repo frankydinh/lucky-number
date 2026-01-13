@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import './RacingCar.css';
 
 function RacingCar({ names, duration, onComplete }) {
@@ -17,15 +17,7 @@ function RacingCar({ names, duration, onComplete }) {
   const carEmojis = ['🏎️', '🚗', '🚙', '🚕', '🏁'];
 
   useEffect(() => {
-    startRace();
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, []);
-
-  const startRace = () => {
+    const startRace = () => {
     setIsRacing(true);
     startTimeRef.current = Date.now();
     
@@ -83,6 +75,16 @@ function RacingCar({ names, duration, onComplete }) {
 
     animationRef.current = requestAnimationFrame(animate);
   };
+
+    startRace();
+    
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="racing-container">

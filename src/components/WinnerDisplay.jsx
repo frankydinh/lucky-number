@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect } from 'react';
+import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import confetti from 'canvas-confetti';
 import './WinnerDisplay.css';
 
 function WinnerDisplay({ winner, mode, onReset }) {
-  const [showConfetti, setShowConfetti] = useState(true);
-
   useEffect(() => {
-    if (showConfetti) {
-      triggerConfetti();
-    }
-  }, []);
-
-  const triggerConfetti = () => {
+    const triggerConfetti = () => {
     const duration = 3000;
     const end = Date.now() + duration;
 
@@ -39,6 +32,9 @@ function WinnerDisplay({ winner, mode, onReset }) {
 
     frame();
   };
+
+    triggerConfetti();
+  }, []);
 
   const renderWinnerContent = () => {
     if (mode === 'racing' && Array.isArray(winner)) {
