@@ -1,0 +1,192 @@
+.racing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.race-track {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.finish-line {
+  position: absolute;
+  right: 30px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(
+    0deg,
+    #000,
+    #000 10px,
+    #fff 10px,
+    #fff 20px
+  );
+}
+
+.finish-flag {
+  position: absolute;
+  top: 10px;
+  right: -15px;
+  font-size: 2rem;
+  animation: wave 1s infinite;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}
+
+.race-lane {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.lane-name {
+  min-width: 120px;
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 1rem;
+  text-align: right;
+}
+
+.lane-track {
+  flex: 1;
+  height: 50px;
+  background: linear-gradient(to bottom, #E5E7EB 0%, #E5E7EB 45%, #FCD34D 45%, #FCD34D 55%, #E5E7EB 55%, #E5E7EB 100%);
+  border-radius: 10px;
+  position: relative;
+  border: 2px solid #D1D5DB;
+  overflow: visible;
+}
+
+.race-car {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: left 0.1s linear;
+}
+
+.racing-text {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.racing-text p {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .race-track {
+    padding: 20px;
+  }
+
+  .lane-name {
+    min-width: 80px;
+    font-size: 0.9rem;
+  }
+
+  .lane-track {
+    height: 40px;
+  }
+
+  .race-car {
+    width: 40px;
+    height: 32px;
+    font-size: 1.5rem;
+  }
+
+  .finish-flag {
+    font-size: 1.5rem;
+    right: -12px;
+  }
+
+  .racing-text p {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .racing-container {
+    padding: 10px;
+  }
+
+  .race-track {
+    padding: 15px;
+  }
+
+  .race-lane {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 15px;
+  }
+
+  .lane-name {
+    min-width: auto;
+    text-align: left;
+    font-size: 0.85rem;
+  }
+
+  .lane-track {
+    width: 100%;
+    height: 35px;
+  }
+
+  .race-car {
+    width: 35px;
+    height: 28px;
+    font-size: 1.2rem;
+  }
+
+  .finish-line {
+    right: 15px;
+  }
+
+  .racing-text p {
+    font-size: 1.2rem;
+  }
+}
