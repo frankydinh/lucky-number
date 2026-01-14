@@ -73,23 +73,32 @@ function WheelOfNames({ names, duration, onComplete }) {
     const startSpin = () => {
       setIsSpinning(true);
     
-    // Calculate winner
+    // Calculate winner first
     winnerIndex.current = Math.floor(Math.random() * names.length);
     
     // Calculate rotation to land on winner
     const anglePerSlice = 360 / names.length;
     const targetAngle = 360 - (winnerIndex.current * anglePerSlice) - (anglePerSlice / 2);
-    const spins = 5; // Number of full rotations
+    
+    // Dynamic spin count based on number of names for realistic effect
+    // More names = more spins to show them all
+    const baseSpins = 3;
+    const additionalSpins = Math.floor(names.length / 5); // Add 1 spin per 5 names
+    const spins = baseSpins + additionalSpins;
     const totalRotation = (spins * 360) + targetAngle;
 
     setTimeout(() => {
       setRotation(totalRotation);
     }, 100);
 
+    // Calculate actual duration with some variation for realism
+    // Duration is flexible to allow for natural deceleration
+    const actualDuration = duration * 1000;
+
     setTimeout(() => {
       setIsSpinning(false);
       onComplete(names[winnerIndex.current]);
-    }, duration * 1000);
+    }, actualDuration);
   };
 
     startSpin();
@@ -104,7 +113,7 @@ function WheelOfNames({ names, duration, onComplete }) {
         animate={{ rotate: rotation }}
         transition={{
           duration: duration,
-          ease: [0.25, 0.46, 0.45, 0.94]
+          ease: [0.17, 0.67, 0.16, 1] // Custom cubic-bezier for dramatic slowdown near end
         }}
       >
         <canvas

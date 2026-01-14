@@ -10,7 +10,7 @@ import WinnerDisplay from './components/WinnerDisplay';
 function App() {
   const [names, setNames] = useState([]);
   const [mode, setMode] = useState('wheel'); // 'wheel' or 'racing'
-  const [duration, setDuration] = useState(60); // in seconds
+  const [duration, setDuration] = useState(5); // in seconds
   const [isDrawing, setIsDrawing] = useState(false);
   const [winner, setWinner] = useState(null);
   const [removeWinner, setRemoveWinner] = useState(false);

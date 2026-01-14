@@ -1,7 +1,7 @@
 import './DurationSettings.css';
 
 function DurationSettings({ duration, setDuration }) {
-  const presetDurations = [30, 60, 90, 120];
+  const presetDurations = [5, 10, 30, 60];
 
   const handleSliderChange = (e) => {
     setDuration(parseInt(e.target.value));
