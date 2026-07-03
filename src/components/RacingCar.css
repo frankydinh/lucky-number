@@ -83,16 +83,79 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 50px;
-  height: 40px;
-  border-radius: 8px;
+  transition: left 0.08s linear;
+  will-change: left;
+}
+
+.race-car-body {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 50px;
+  height: 40px;
+  border-radius: 8px;
   font-size: 1.8rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: left 0.05s linear;
-  will-change: left;
+  animation: bobCar 0.35s ease-in-out infinite;
+}
+
+/* Emojis (car, fish, horse) point left by default. Flip them so the racer
+   faces the finish line it is moving toward. */
+.race-car-emoji {
+  display: inline-block;
+  transform: scaleX(-1);
+  line-height: 1;
+}
+
+@keyframes bobCar {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Fish gently sway as they swim. */
+.theme-fish .race-car-body {
+  animation: bobFish 0.7s ease-in-out infinite;
+}
+
+@keyframes bobFish {
+  0%, 100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(4deg);
+  }
+}
+
+/* Horses bounce with a galloping rhythm. */
+.theme-horse .race-car-body {
+  animation: bobHorse 0.4s ease-in-out infinite;
+}
+
+@keyframes bobHorse {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-7px);
+  }
+  60% {
+    transform: translateY(0);
+  }
+}
+
+/* Themed lane surfaces. */
+.theme-fish .lane-track {
+  background: linear-gradient(to bottom, #BAE6FD 0%, #7DD3FC 45%, #38BDF8 55%, #7DD3FC 100%);
+  border-color: #38BDF8;
+}
+
+.theme-horse .lane-track {
+  background: linear-gradient(to bottom, #D9F99D 0%, #A3E635 45%, #C7A17A 45%, #C7A17A 55%, #A3E635 55%, #D9F99D 100%);
+  border-color: #A3E635;
 }
 
 .racing-text {
@@ -134,7 +197,7 @@
     height: 40px;
   }
 
-  .race-car {
+  .race-car-body {
     width: 40px;
     height: 32px;
     font-size: 1.5rem;
@@ -177,7 +240,7 @@
     height: 35px;
   }
 
-  .race-car {
+  .race-car-body {
     width: 35px;
     height: 28px;
     font-size: 1.2rem;

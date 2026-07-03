@@ -17,7 +17,7 @@ function DurationSettings({ duration, setDuration }) {
       
       <input
         type="range"
-        min="10"
+        min="5"
         max="180"
         step="5"
         value={duration}

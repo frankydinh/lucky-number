@@ -1,6 +1,6 @@
 # 🍀 Lucky Draw - PWA Random Name Picker
 
-A modern, fully responsive Progressive Web App (PWA) built with React for running lucky draw events. Features engaging animations with two modes: Wheel of Names and Racing Car simulator.
+A modern, fully responsive Progressive Web App (PWA) built with React for running lucky draw events. Features engaging animations with multiple modes: Wheel of Names and Racing simulators (Car, Fish, and Horse).
 
 ![Lucky Draw](https://img.shields.io/badge/PWA-Ready-brightgreen)
 ![React](https://img.shields.io/badge/React-19.2-blue)
@@ -13,7 +13,9 @@ A modern, fully responsive Progressive Web App (PWA) built with React for runnin
 - **🎯 Two Draw Modes**:
   - **🎡 Wheel of Names**: Animated spinning wheel with colorful segments
   - **🏎️ Racing Car**: Exciting race simulation with Top 3 podium display
-- **⏱️ Customizable Duration**: Adjust draw duration from 10 to 180 seconds
+  - **🐟 Fish Race**: Same race, themed with fish swimming across water lanes
+  - **🐎 Horse Race**: Same race, themed with horses galloping across the field
+- **⏱️ Customizable Duration**: Adjust draw duration from 5 to 180 seconds
 - **🎉 Winner Effects**: Confetti animations and visual celebrations
 - **🔄 Smart Options**: Toggle to remove winners from subsequent draws (Wheel mode)
 
@@ -92,7 +94,7 @@ npm run deploy
    - Or upload a CSV file with names
    
 2. **Select Mode**:
-   - Choose between Wheel of Names or Racing Car mode
+   - Choose between Wheel of Names or a Racing mode (Car, Fish, or Horse)
    
 3. **Set Duration**:
    - Adjust the animation duration (default: 60 seconds)

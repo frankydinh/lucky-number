@@ -76,9 +76,11 @@ function WheelOfNames({ names, duration, onComplete }) {
     // Calculate winner first
     winnerIndex.current = Math.floor(Math.random() * names.length);
     
-    // Calculate rotation to land on winner
+    // Calculate rotation to land the winning slice under the pointer, which
+    // sits at the top of the wheel (270° in canvas coordinates, where 0° is at
+    // 3 o'clock and angles increase clockwise).
     const anglePerSlice = 360 / names.length;
-    const targetAngle = 360 - (winnerIndex.current * anglePerSlice) - (anglePerSlice / 2);
+    const targetAngle = 270 - (winnerIndex.current * anglePerSlice) - (anglePerSlice / 2);
     
     // Dynamic spin count based on number of names for realistic effect
     // More names = more spins to show them all
