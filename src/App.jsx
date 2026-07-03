@@ -7,6 +7,9 @@ import WheelOfNames from './components/WheelOfNames';
 import RacingCar from './components/RacingCar';
 import WinnerDisplay from './components/WinnerDisplay';
 
+// Maps a racing-style mode to the visual theme used by RacingCar.
+const RACING_THEMES = { racing: 'car', fish: 'fish', horse: 'horse' };
+
 function App() {
   const [names, setNames] = useState([]);
   const [mode, setMode] = useState('wheel'); // 'wheel' or 'racing'
@@ -75,25 +78,25 @@ function App() {
       )}
 
       {isDrawing && mode === 'wheel' && (
-        <WheelOfNames 
-          names={names} 
-          duration={duration} 
+        <WheelOfNames
+          names={names}
+          duration={duration}
           onComplete={handleComplete}
         />
       )}
 
-      {isDrawing && mode === 'racing' && (
-        <RacingCar 
-          names={names} 
-          duration={duration} 
+      {isDrawing && mode !== 'wheel' && (
+        <RacingCar
+          names={names}
+          duration={duration}
+          theme={RACING_THEMES[mode]}
           onComplete={handleComplete}
         />
       )}
 
       {winner && !isDrawing && (
-        <WinnerDisplay 
-          winner={winner} 
-          mode={mode} 
+        <WinnerDisplay
+          winner={winner}
           onReset={handleReset}
         />
       )}

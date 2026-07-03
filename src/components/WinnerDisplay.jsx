@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import './WinnerDisplay.css';
 
-function WinnerDisplay({ winner, mode, onReset }) {
+function WinnerDisplay({ winner, onReset }) {
   useEffect(() => {
     const triggerConfetti = () => {
     const duration = 3000;
@@ -37,15 +37,15 @@ function WinnerDisplay({ winner, mode, onReset }) {
   }, []);
 
   const renderWinnerContent = () => {
-    if (mode === 'racing' && Array.isArray(winner)) {
-      // Show Top 3 for racing mode
+    if (Array.isArray(winner)) {
+      // Show Top 3 for any racing-style mode (car, fish, horse)
       return (
         <div className="top-three-container">
           <h1 className="winner-title">🏁 Race Results</h1>
           <div className="podium">
             {winner.map((racer, index) => (
               <motion.div
-                key={racer.name}
+                key={racer.position}
                 className={`podium-place place-${racer.position}`}
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
