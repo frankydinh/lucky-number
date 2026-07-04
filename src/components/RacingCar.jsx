@@ -7,17 +7,18 @@ const LANE_COLORS = [
 ];
 
 // Each racing mode reuses the same mechanics with a different look & feel.
+// Every racer in a mode shares one icon; lanes are told apart by colour.
 const THEMES = {
   car: {
-    emojis: ['🏎️', '🚗', '🚙', '🚕', '🏁'],
+    emoji: '🏎️',
     text: '🏁 Racing to the finish...',
   },
   fish: {
-    emojis: ['🐟', '🐠', '🐡', '🦈', '🐬'],
+    emoji: '🐟',
     text: '🐟 Swimming to the finish...',
   },
   horse: {
-    emojis: ['🐎', '🐴', '🦄', '🦓', '🏇'],
+    emoji: '🐎',
     text: '🐎 Galloping to the finish...',
   },
 };
@@ -27,7 +28,7 @@ const easeInOut = (t) =>
   t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
 function RacingCar({ names, duration, onComplete, theme = 'car' }) {
-  const { emojis, text } = THEMES[theme] || THEMES.car;
+  const { emoji, text } = THEMES[theme] || THEMES.car;
   // Progress is keyed by car index (not name) so duplicate names still race
   // independently.
   const [progress, setProgress] = useState([]);
@@ -73,10 +74,14 @@ function RacingCar({ names, duration, onComplete, theme = 'car' }) {
     const wobbleAmp = names.map(() => 2 + Math.random() * 3);
 
     const startTime = performance.now();
-    let frameId = null;
+    let intervalId = null;
 
-    const animate = (now) => {
-      const u = Math.min((now - startTime) / raceDuration, 1);
+    // Driven by a timer (not requestAnimationFrame) so the race keeps
+    // progressing and always finishes even if the tab is hidden or RAF is
+    // throttled. Timing is derived from performance.now(), and the CSS
+    // `transition` on the car keeps motion smooth between ticks.
+    const tick = () => {
+      const u = Math.min((performance.now() - startTime) / raceDuration, 1);
       const newProgress = names.map((_, i) => {
         const eased = easeInOut(Math.min(Math.pow(u, pace[i]), 1));
         const base = targets[i] * eased;
@@ -92,9 +97,9 @@ function RacingCar({ names, duration, onComplete, theme = 'car' }) {
 
       setProgress(newProgress);
 
-      if (u < 1) {
-        frameId = requestAnimationFrame(animate);
-      } else {
+      if (u >= 1) {
+        clearInterval(intervalId);
+        intervalId = null;
         setIsRacing(false);
         const ranking = names
           .map((name, i) => ({ name, position: targets[i] }))
@@ -106,11 +111,12 @@ function RacingCar({ names, duration, onComplete, theme = 'car' }) {
       }
     };
 
-    frameId = requestAnimationFrame(animate);
+    tick();
+    intervalId = setInterval(tick, 1000 / 60);
 
     return () => {
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId);
+      if (intervalId !== null) {
+        clearInterval(intervalId);
       }
     };
   }, [names, duration]);
@@ -136,7 +142,7 @@ function RacingCar({ names, duration, onComplete, theme = 'car' }) {
                 >
                   {/* Emojis face left by default; flip them to face the finish line. */}
                   <span className="race-car-emoji">
-                    {emojis[index % emojis.length]}
+                    {emoji}
                   </span>
                 </span>
               </div>
