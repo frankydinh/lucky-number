@@ -57,6 +57,29 @@
   cursor: not-allowed;
 }
 
+.upload-hint {
+  margin: 10px 0 0 0;
+  font-size: 0.85rem;
+  color: #6B7280;
+  line-height: 1.5;
+}
+
+.template-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.template-link:hover {
+  color: var(--primary-dark);
+}
+
 .names-list {
   margin-top: 20px;
   padding: 15px;
