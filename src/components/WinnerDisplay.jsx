@@ -51,13 +51,23 @@ function WinnerDisplay({ winner, onReset }) {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: index * 0.3, duration: 0.5 }}
               >
-                <div className="place-medal">
-                  {racer.position === 1 && '🥇'}
-                  {racer.position === 2 && '🥈'}
-                  {racer.position === 3 && '🥉'}
+                {racer.emoji && (
+                  <div
+                    className="place-racer"
+                    style={{ backgroundColor: racer.color }}
+                  >
+                    <span className="place-racer-emoji">{racer.emoji}</span>
+                  </div>
+                )}
+                <div className="place-bar">
+                  <div className="place-medal">
+                    {racer.position === 1 && '🥇'}
+                    {racer.position === 2 && '🥈'}
+                    {racer.position === 3 && '🥉'}
+                  </div>
+                  <div className="place-position">{racer.position}</div>
+                  <div className="place-name">{racer.name}</div>
                 </div>
-                <div className="place-position">{racer.position}</div>
-                <div className="place-name">{racer.name}</div>
               </motion.div>
             ))}
           </div>

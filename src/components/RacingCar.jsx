@@ -1,10 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
+import { RACER_COLORS } from '../palette';
 import './RacingCar.css';
-
-const LANE_COLORS = [
-  '#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6',
-  '#EC4899', '#14B8A6', '#F97316', '#06B6D4', '#6366F1'
-];
 
 // Each racing mode reuses the same mechanics with a different look & feel.
 // Every racer in a mode shares one icon; lanes are told apart by colour.
@@ -102,11 +98,16 @@ function RacingCar({ names, duration, onComplete, theme = 'car' }) {
         intervalId = null;
         setIsRacing(false);
         const ranking = names
-          .map((name, i) => ({ name, position: targets[i] }))
-          .sort((a, b) => b.position - a.position);
-        const top3 = ranking
-          .slice(0, 3)
-          .map((racer, idx) => ({ name: racer.name, position: idx + 1 }));
+          .map((name, i) => ({ name, finalProgress: targets[i], laneIndex: i }))
+          .sort((a, b) => b.finalProgress - a.finalProgress);
+        const top3 = ranking.slice(0, 3).map((racer, idx) => ({
+          name: racer.name,
+          position: idx + 1,
+          // Carry each racer's icon and lane colour so the results can show
+          // the same visual identity people saw on the track.
+          emoji,
+          color: RACER_COLORS[racer.laneIndex % RACER_COLORS.length],
+        }));
         onCompleteRef.current(top3[0].name, top3);
       }
     };
@@ -119,7 +120,7 @@ function RacingCar({ names, duration, onComplete, theme = 'car' }) {
         clearInterval(intervalId);
       }
     };
-  }, [names, duration]);
+  }, [names, duration, emoji]);
 
   return (
     <div className={`racing-container theme-${theme}`}>
@@ -138,7 +139,7 @@ function RacingCar({ names, duration, onComplete, theme = 'car' }) {
               >
                 <span
                   className="race-car-body"
-                  style={{ backgroundColor: LANE_COLORS[index % LANE_COLORS.length] }}
+                  style={{ backgroundColor: RACER_COLORS[index % RACER_COLORS.length] }}
                 >
                   {/* Emojis face left by default; flip them to face the finish line. */}
                   <span className="race-car-emoji">

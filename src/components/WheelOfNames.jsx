@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { RACER_COLORS } from '../palette';
 import './WheelOfNames.css';
 
 function WheelOfNames({ names, duration, onComplete }) {
@@ -8,10 +9,7 @@ function WheelOfNames({ names, duration, onComplete }) {
   const canvasRef = useRef(null);
   const winnerIndex = useRef(null);
 
-  const colors = [
-    '#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6',
-    '#EC4899', '#14B8A6', '#F97316', '#06B6D4', '#6366F1'
-  ];
+  const colors = RACER_COLORS;
 
   useEffect(() => {
     const drawWheel = () => {
