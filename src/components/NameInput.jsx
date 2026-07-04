@@ -28,6 +28,22 @@ function NameInput({ names, setNames }) {
     setNames([]);
   };
 
+  const handleDownloadTemplate = () => {
+    // One name per line matches how uploads are parsed and round-trips cleanly
+    // (a header row would be imported as a participant, so we omit one).
+    const sampleNames = ['Alice', 'Bob', 'Charlie', 'Diana', 'Ethan'];
+    const csvContent = sampleNames.join('\n') + '\n';
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'lucky-draw-template.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -68,6 +84,17 @@ function NameInput({ names, setNames }) {
           />
         </label>
       </div>
+
+      <p className="upload-hint">
+        Uploading a CSV? Use one name per line (or comma-separated).{' '}
+        <button
+          type="button"
+          className="template-link"
+          onClick={handleDownloadTemplate}
+        >
+          ⬇ Download template
+        </button>
+      </p>
 
       {names.length > 0 && (
         <div className="names-list">
